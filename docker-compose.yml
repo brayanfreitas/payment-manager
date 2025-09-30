@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: payment-manager-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: payment_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - payment-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: payment-manager-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres123@postgres:5432/payment_manager"
+      NODE_ENV: development
+      PORT: 3000
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - payment-network
+    command: yarn start:dev
+
+volumes:
+  postgres_data:
+
+networks:
+  payment-network:
+    driver: bridge

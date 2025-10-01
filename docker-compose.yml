@@ -13,8 +13,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - payment-network
 
   app:
     build:
@@ -33,13 +31,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    networks:
-      - payment-network
     command: yarn start:dev
 
 volumes:
   postgres_data:
-
-networks:
-  payment-network:
-    driver: bridge

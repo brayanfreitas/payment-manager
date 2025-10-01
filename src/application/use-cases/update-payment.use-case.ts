@@ -2,6 +2,7 @@ import { PaymentMethod, type Payment } from '@/domain';
 import type { PaymentRepository } from '@/domain/repositories';
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,7 +10,10 @@ import type { UpdatePaymentDto } from '../dtos';
 
 @Injectable()
 export class UpdatePaymentUseCase {
-  constructor(private readonly paymentRepository: PaymentRepository) {}
+  constructor(
+    @Inject('PaymentRepository')
+    private readonly paymentRepository: PaymentRepository,
+  ) {}
 
   async execute(
     id: string,

@@ -10,6 +10,8 @@ COPY . .
 
 RUN npx prisma generate
 
+RUN npx prisma migrate dev
+
 RUN yarn build
 
 EXPOSE 3000

@@ -1,11 +1,14 @@
 import type { Payment } from '@/domain';
 import type { PaymentFilters, PaymentRepository } from '@/domain/repositories';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import type { PaymentFiltersDto } from '../dtos';
 
 @Injectable()
 export class ListPaymentsUseCase {
-  constructor(private readonly paymentRepository: PaymentRepository) {}
+  constructor(
+    @Inject('PaymentRepository')
+    private readonly paymentRepository: PaymentRepository,
+  ) {}
 
   async execute(filters?: PaymentFiltersDto): Promise<Payment[]> {
     const paymentFilters: PaymentFilters = {};

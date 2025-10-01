@@ -2,11 +2,14 @@ import type { CreatePaymentDto } from '@/application/dtos';
 import type { Payment } from '@/domain';
 import { PaymentMethod, PaymentStatus } from '@/domain';
 import type { PaymentRepository } from '@/domain/repositories';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CreatePaymentUseCase {
-  constructor(private readonly paymentRepository: PaymentRepository) {}
+  constructor(
+    @Inject('PaymentRepository')
+    private readonly paymentRepository: PaymentRepository,
+  ) {}
 
   async execute(createPaymentDto: CreatePaymentDto): Promise<Payment> {
     const { cpf, description, amount, paymentMethod } = createPaymentDto;

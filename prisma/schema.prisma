@@ -13,7 +13,7 @@ datasource db {
 model Payment {
   id            String        @id @default(uuid()) @db.Uuid
   cpf           String
-  description   String
+  description   String?
   amount        Float
   paymentMethod PaymentMethod
   status        PaymentStatus @default(PENDING)

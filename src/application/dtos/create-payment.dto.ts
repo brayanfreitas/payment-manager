@@ -4,6 +4,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
   Validate,
@@ -15,9 +16,10 @@ export class CreatePaymentDto {
   @Validate(CpfValidator)
   cpf: string;
 
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description?: string;
 
   @IsNumber()
   @IsPositive()

@@ -8,7 +8,7 @@ CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'FAIL');
 CREATE TABLE "payments" (
     "id" UUID NOT NULL,
     "cpf" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "amount" DOUBLE PRECISION NOT NULL,
     "paymentMethod" "PaymentMethod" NOT NULL,
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',

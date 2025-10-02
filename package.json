@@ -21,7 +21,12 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
-    "docker:db": "docker-compose up postgres -d",
+    "docker:db": "docker-compose up db -d",
+    "docker:temporal": "docker-compose up db temporal temporal-ui -d",
+    "docker:full": "docker-compose up -d && echo '🚀 All services started! Temporal UI: http://localhost:8080'",
+    "temporal:up": "docker-compose up temporal temporal-ui -d",
+    "temporal:down": "docker-compose stop temporal temporal-ui",
+    "temporal:logs": "docker-compose logs -f temporal",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
@@ -36,8 +41,13 @@
     "class-validator": "^0.14.0",
     "class-transformer": "^0.5.1",
     "cpf-cnpj-validator": "^1.0.3",
+    "mercadopago": "^2.0.11",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "@temporalio/client": "^1.10.1",
+    "@temporalio/worker": "^1.10.1",
+    "@temporalio/workflow": "^1.10.1",
+    "@temporalio/activity": "^1.10.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

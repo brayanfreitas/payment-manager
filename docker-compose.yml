@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  postgres:
+  db:
     image: postgres:15-alpine
     container_name: payment-manager-db
     restart: unless-stopped
@@ -23,15 +23,49 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: "postgresql://postgres:postgres123@postgres:5432/payment_manager"
+      DATABASE_URL: "postgresql://postgres:postgres123@db:5432/payment_manager"
       NODE_ENV: development
       PORT: 3000
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_NAMESPACE: default
+      WEBHOOK_BASE_URL: http://localhost:3000
+      MERCADO_PAGO_ACCESS_TOKEN: TEST-1234567890-123456-abcdef123456789-123456789
+      MERCADO_PAGO_PUBLIC_KEY: TEST-abcdef12-3456-7890-abcd-ef1234567890
     depends_on:
-      - postgres
+      - db
+      - temporal
     volumes:
       - .:/app
       - /app/node_modules
     command: yarn start:dev
+
+  # Temporal.io services
+  temporal:
+    image: temporalio/auto-setup:1.22.0
+    restart: unless-stopped
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PWD=postgres123
+      - POSTGRES_SEEDS=db
+    ports:
+      - "7233:7233"
+    depends_on:
+      - db
+    volumes:
+      - ./temporal-config:/etc/temporal/config/dynamicconfig
+
+  temporal-ui:
+    image: temporalio/ui:2.21.3
+    restart: unless-stopped
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - temporal
 
 volumes:
   postgres_data:

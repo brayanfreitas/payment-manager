@@ -60,4 +60,13 @@ export class UpdatePaymentDto {
   @IsOptional()
   @IsEnum(PaymentStatus)
   status?: PaymentStatus;
+
+  @ApiProperty({
+    description: 'ID do Mercado Pago',
+    example: 'MP-123456789',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  mercadoPagoId?: string;
 }

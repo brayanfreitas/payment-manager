@@ -71,7 +71,7 @@ export class CreatePaymentUseCase {
     const paymentId = randomUUID();
 
     try {
-      await this.temporalService.startPaymentWorkflow({
+      const workflowId = await this.temporalService.startPaymentWorkflow({
         paymentId,
         paymentMethod: 'CREDIT_CARD',
         amount,
@@ -79,7 +79,7 @@ export class CreatePaymentUseCase {
         description,
       });
 
-      this.logger.log(`Credit card payment workflow started for ${paymentId}`);
+      this.logger.log(`Credit card payment workflow started for ${workflowId}`);
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const payments = await this.paymentRepository.findAll({ cpf });

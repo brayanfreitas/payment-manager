@@ -14,11 +14,11 @@ export class PaymentRepositoryImpl implements PaymentRepository {
     const createdPayment = await this.prisma.payment.create({
       data: {
         cpf: payment.cpf,
-        description: payment.description,
+        description: payment.description || null,
         amount: payment.amount,
         paymentMethod: payment.paymentMethod,
         status: payment.status,
-        mercadoPagoId: payment.mercadoPagoId,
+        mercadoPagoId: payment.mercadoPagoId || null,
       },
     });
 
@@ -53,16 +53,23 @@ export class PaymentRepositoryImpl implements PaymentRepository {
   }
 
   async update(id: string, paymentData: Partial<Payment>): Promise<Payment> {
+    const updateData: any = {};
+
+    if (paymentData.cpf !== undefined) updateData.cpf = paymentData.cpf;
+    if (paymentData.description !== undefined)
+      updateData.description = paymentData.description || null;
+    if (paymentData.amount !== undefined)
+      updateData.amount = paymentData.amount;
+    if (paymentData.paymentMethod !== undefined)
+      updateData.paymentMethod = paymentData.paymentMethod;
+    if (paymentData.status !== undefined)
+      updateData.status = paymentData.status;
+    if (paymentData.mercadoPagoId !== undefined)
+      updateData.mercadoPagoId = paymentData.mercadoPagoId || null;
+
     const updatedPayment = await this.prisma.payment.update({
       where: { id },
-      data: {
-        cpf: paymentData.cpf,
-        description: paymentData.description,
-        amount: paymentData.amount,
-        paymentMethod: paymentData.paymentMethod,
-        status: paymentData.status,
-        mercadoPagoId: paymentData.mercadoPagoId,
-      },
+      data: updateData,
     });
 
     return this.mapToDomain(updatedPayment);

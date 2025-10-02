@@ -42,6 +42,10 @@ export class PaymentActivitiesImpl implements PaymentActivities {
 
       return createdPayment.id;
     } catch (error) {
+      console.log('Failed to create payment record', {
+        paymentId: input.paymentId,
+        error,
+      });
       context.log.error('Failed to create payment record', {
         paymentId: input.paymentId,
         error,

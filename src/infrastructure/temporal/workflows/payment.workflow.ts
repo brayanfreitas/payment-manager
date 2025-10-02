@@ -38,6 +38,8 @@ export async function paymentWorkflow(
   let paymentStatus = 'PENDING';
   let cancelled = false;
 
+  console.log('Payment workflow started');
+
   setHandler(paymentStatusUpdateSignal, (paymentId: string, status: string) => {
     if (paymentId === input.paymentId) {
       paymentStatus = status;
@@ -53,7 +55,7 @@ export async function paymentWorkflow(
   if (input.paymentMethod !== 'CREDIT_CARD') {
     throw new Error('Workflow is only for CREDIT_CARD payments');
   }
-
+  console.log('CHEGOU AQUI');
   try {
     const createdPaymentId = await activities.createPaymentRecord(input);
 
